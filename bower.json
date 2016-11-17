@@ -1,0 +1,26 @@
+{
+  "name": "pocuito",
+  "authors": [
+    "tunnelshade <tunnelshade@gmail.com>"
+  ],
+  "description": "An extension for recording and replaying web security PoC",
+  "main": "",
+  "license": "MIT",
+  "homepage": "http://blog.tunnelshade.in",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "backbone": "backbonejs#^1.3.3",
+    "backbone.marionette": "^3.1.0",
+    "mustache.js": "mustache#^2.3.0",
+    "backbone.localStorage": "backbone.localstorage#^1.1.16",
+    "bootstrap": "^3.3.7"
+  }
+}

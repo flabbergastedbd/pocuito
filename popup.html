@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<script type='text/html' id='template-request-item'>
+<td>{{method}}</td>
+<td>{{url}}</td>
+</script>
+
+<script type='text/html' id='template-requests-table'>
+<div class='row'><div class='col-sm-12 table-responsive'>
+<table class="table table-hover table-condensed">
+<thead>
+  <tr>
+    <th>Method</th>
+    <th>URL</th>
+    <th></th>
+  </tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</div></div>
+</script>
+
+<script type="text/html" id='template-root'>
+<br/>
+<div class="row">
+  <div class="col-sm-offset-1 col-sm-10">
+    <ul class="nav nav-pills" role="tablist">
+      <li><a href='#events' role="tab" data-toggle="tab">Events</a></li>
+      <li class="active"><a href='#proxy' role="tab" data-toggle="tab">Proxy</a></li>
+    </ul>
+  </div>
+</div>
+<div class="row">
+  <div class="col-sm-offset-1 col-sm-10">
+    <div class="tab-content">
+      <div role="tabpanel" class="tab-pane" id="events"></div>
+      <div role="tabpanel" class="tab-pane active" id="proxy"></div>
+    </div>
+  </div>
+</div>
+</script>
+
+<script type='text/html' id='template-proxy'>
+<div id='proxyTable'></div>
+{{#is_init}}
+<div class='row'>
+  <div class='col-sm-offset-4 col-sm-4'>
+    <button class='btn btn-lg btn-primary' id='recordRequestsBtn'>Record</button>
+  </div>
+</div>
+<br/>
+{{/is_init}}
+{{#is_recording}}
+<div class='row'>
+  <div class='col-sm-offset-4 col-sm-4'>
+    <button class='btn btn-lg btn-warning' id='stopRecordRequestsBtn'>Stop</button>
+  </div>
+</div>
+<br/>
+{{/is_recording}}
+<div class='row'>
+  <div class='col-sm-offset-4 col-sm-4'>
+    <button class='btn btn-lg btn-danger' id='resetBtn'>Reset</button>
+  </div>
+</div>
+</script>
+
+<script type='text/html' id='template-event-item'>
+<td>{{step}} <button class='btn btn-xs getCursorBtn'><span class="glyphicon {{#cursor}}glyphicon-menu-right{{/cursor}}{{^cursor}}glyphicon-minus{{/cursor}}"></span></button></td>
+<td>{{type}}</td>
+<td>{{#value}}{{value}}{{/value}}{{^value}}{{text}}{{/value}}</td>
+<td><button class='btn btn-xs btn-danger deleteEventBtn'><span class="glyphicon glyphicon-remove"></span></button></td>
+</script>
+
+<script type='text/html' id='template-events-table'>
+<div class='row'><div class='col-sm-12 table-responsive'>
+<table class="table table-hover table-condensed">
+<thead>
+  <tr>
+    <th></th>
+    <th>Event</th>
+    <th>Value</th>
+    <th></th>
+  </tr>
+</thead>
+<tbody>
+</tbody>
+</table>
+</div></div>
+</script>
+
+<script type='text/html' id='template-main'>
+<br/>
+<div id='main'></div>
+<br/>
+{{#is_init}}
+<div class='row'>
+  <div class='col-sm-offset-4 col-sm-4'>
+    <button class='btn btn-lg btn-primary' id='recordPocBtn'>Record</button>
+  </div>
+</div>
+<br/>
+<div class='row'>
+  <div class='col-sm-offset-4 col-sm-4'>
+    <button class='btn btn-lg btn-warning' id='replayPocBtn'>Replay</button>
+  </div>
+</div>
+{{/is_init}}
+{{^is_init}}
+  {{^is_paused}}
+    <div class='row'>
+      <div class='col-sm-offset-4 col-sm-4'>
+        <button class='btn-lg btn' id='pausePocBtn'>Pause</button>
+      </div>
+    </div>
+    <br/>
+  {{/is_paused}}
+  {{#is_paused}}
+    <div class='row'>
+      <div class='col-sm-offset-4 col-sm-4'>
+        <button class='btn-lg btn btn-primary' id='playPocStepBtn'>Play Step</button>
+      </div>
+    </div>
+    <br/>
+    <div class='row'>
+      <div class='col-sm-offset-4 col-sm-4'>
+        <button class='btn-lg btn' id='recordPocBtn'>Resume</button>
+      </div>
+    </div>
+    <br/>
+  {{/is_paused}}
+<div class='row'>
+  <div class='col-sm-offset-4 col-sm-4'>
+    <button class='btn-lg btn btn-danger' id='resetPocBtn'>Reset</button>
+  </div>
+</div>
+{{/is_init}}
+</script>
+
+<script type='text/html' id='template-recorder'>
+Recorder
+</script>
+
+<script type='text/html' id='template-replayer'>
+Replayer
+</script>
+
+<script src='/bower_components/jquery/dist/jquery.min.js'></script>
+<script src='/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
+<script src='/bower_components/underscore/underscore-min.js'></script>
+<script src='/bower_components/mustache.js/mustache.min.js'></script>
+<script src='/bower_components/backbone/backbone-min.js'></script>
+<script src='/bower_components/backbone.localStorage/backbone.localStorage-min.js'></script>
+<script src='/bower_components/backbone.radio/build/backbone.radio.min.js'></script>
+<script src='/bower_components/backbone.marionette/lib/backbone.marionette.min.js'></script>
+
+<link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.min.css'/>
+<link rel='stylesheet' href='/css/pocuito.css'/>
+
+<script src='/js/models/event.js'></script>
+<script src='/js/models/request.js'></script>
+
+<script src='/js/collections/events.js'></script>
+<script src='/js/collections/requests.js'></script>
+
+<script src='/js/views/recorder.js'></script>
+<script src='/js/views/replayer.js'></script>
+<script src='/js/views/events.js'></script>
+<script src='/js/views/proxy.js'></script>
+<script src='/js/views/main.js'></script>
+</head>
+<body>
+  <div class="container">
+
+  </div>
+  <script src='/js/pocuito.js'></script>
+</body>
+</html>

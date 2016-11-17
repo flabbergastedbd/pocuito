@@ -1,0 +1,9 @@
+body {
+  height: 600px;
+  width: 800px;
+}
+
+.table-responsive {
+  height: 400px;
+  overflow: auto;
+}
