@@ -10,6 +10,18 @@ var Pocuito = Pocuito || {};
     events: {
       'click .deleteEventBtn': 'deleteModel',
       'click .getCursorBtn': 'getCursor',
+      'change .eventDescription': 'updateDescription',
+    },
+
+    templateContext: function() {
+      var d = this.model.toJSON();
+      d['toString'] = this.model.toString();
+      return d;
+    },
+
+    updateDescription: function(e) {
+      var descrip = $(e.target).val();
+      this.model.set({'description': descrip});
     },
 
     deleteModel: function() {
@@ -23,7 +35,12 @@ var Pocuito = Pocuito || {};
 
   Pocuito.EventsView = Marionette.CollectionView.extend({
     tagName: 'tbody',
-    childView: Pocuito.EventView
+    childView: Pocuito.EventView,
+
+    initialize: function() {
+      // this.collection.on('add remove', this.render);
+      this.a = null;
+    }
   });
 
 	Pocuito.EventsTableView = Marionette.View.extend({

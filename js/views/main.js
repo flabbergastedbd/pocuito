@@ -5,7 +5,8 @@ var Pocuito = Pocuito || {};
 
   Pocuito.MainView = Mn.View.extend({
     regions: {
-      'main': '#main'
+      'eventsTable': '#eventsTable',
+      'eventForm': '#eventForm'
     },
     template: '#template-main',
 		recorderView: null,
@@ -13,10 +14,12 @@ var Pocuito = Pocuito || {};
 
     events: {
       'click #recordPocBtn': 'recordPoc',
-      'click #replayPocBtn': 'replayPoc',
+      'click #loadPocBtn': 'loadPoc',
       'click #pausePocBtn': 'pausePoc',
       'click #playPocStepBtn': 'playPocStep',
-      'click #resetPocBtn': 'reset'
+      'click #showEventFormBtn': 'showEventForm',
+      'click #resetPocBtn': 'reset',
+      'click #downloadPocBtn': 'downloadPoc'
     },
 
     initialize: function() {
@@ -25,6 +28,14 @@ var Pocuito = Pocuito || {};
       this.eventsCollection.on('change add remove', this.render);
 
       this.eventsCollection.refresh(this.render);
+
+    },
+
+    loadPoc: function() {
+      var bgPage = chrome.extension.getBackgroundPage();
+      if (bgPage && bgPage.background) {
+        bgPage.background.loadPocFile();
+      }
     },
 
     templateContext: function() {
@@ -37,10 +48,23 @@ var Pocuito = Pocuito || {};
       this.eventsCollection.setState(1);
     },
 
+    downloadPoc: function(e) {
+      var $this = this;
+      this.eventsCollection.refresh(function() {
+        var a = $('<a/>', {
+          'download': 'pocuito.txt',
+          'href': 'data:application/json,' + JSON.stringify($this.eventsCollection.toJSON()),
+          'text': 'Download File'
+        });
+        $this.$el.append(a);
+        a[0].click();
+        $this.$el.remove(a);
+      });
+    },
+
     recordPoc: function(e) {
       this.eventsCollection.setState(2);
     },
-
     pausePoc: function(e) {
       this.eventsCollection.setState(3);
     },
@@ -53,13 +77,12 @@ var Pocuito = Pocuito || {};
       this.eventsCollection.setState(4);
     },
 
+    showEventForm: function(e) {
+      this.showChildView('eventForm', new Pocuito.EventFormPickerView({'collection': this.eventsCollection}));
+    },
+
 		onRender: function() {
-      var state = this.eventsCollection.getStateObj();
-			if (!state.is_init) {
-				this.showChildView('main', new Pocuito.EventsTableView({'collection': this.eventsCollection}));
-			} else {
-        this.detachChildView('main');
-      }
+      this.showChildView('eventsTable', new Pocuito.EventsTableView({'collection': this.eventsCollection}));
 		}
   });
 

@@ -3,7 +3,11 @@ body {
   width: 800px;
 }
 
-.table-responsive {
+.table-responsive-fixed-size {
   height: 400px;
   overflow: auto;
+}
+
+.btn-toolbar {
+  text-align: center;
 }

@@ -9,7 +9,7 @@
     "default_icon": "images/icon.png",
     "default_popup": "popup.html"
   },
-  "content_security_policy": "default-src 'self'; script-src 'self'",
+  "content_security_policy": "default-src 'self'; script-src 'self'; connect-src *",
   "permissions": [
     "webRequest",
     "http://*/*",
@@ -18,11 +18,16 @@
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
-      "js": ["/js/content_script.js"]
+      "js": [
+        "/bower_components/jquery/dist/jquery.min.js",
+        "/js/content_script.js"
+      ]
     }
   ],
   "background": {
     "scripts": [
+      "/bower_components/filereader/filereader.js",
+      "/bower_components/jquery/dist/jquery.min.js",
       "/bower_components/underscore/underscore-min.js",
       "/bower_components/backbone/backbone-min.js",
       "/bower_components/backbone.localStorage/backbone.localStorage-min.js",

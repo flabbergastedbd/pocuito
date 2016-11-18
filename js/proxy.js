@@ -8,35 +8,57 @@ var PocuitoProxy = (function() {
   }
 
   PocuitoProxy.prototype = {
-    'initialize': function() {
-      this.boundedRecordRequest = this.recordRequest.bind(this);
+    initialize: function() {
+      this.boundedRecordRequestBody = this.recordRequestBody.bind(this);
+      this.boundedRecordRequestHeaders = this.recordRequestHeaders.bind(this);
     },
 
-    'reset': function() {
+    reset: function() {
       this.requestsCollection.clear();
     },
 
-    'recordRequest': function(message) {
+    recordRequestHeaders: function(message) {
       console.log(message);
-      this.requestsCollection.insert(message)
+      this.insertOrUpdate(message, 'requestHeaders');
     },
 
-    'startRecording': function(tabId) {
+    // Called before thee headers one
+    recordRequestBody: function(message) {
+      console.log(message);
+      this.insertOrUpdate(message, 'requestBody');
+    },
+
+    insertOrUpdate: function(message, attr) {
+      var m = this.requestsCollection.get(parseInt(message.requestId));
+      if (m) {
+        var data = {};
+        data[attr] = message[attr];
+        m.set(data);
+      } else {
+        this.requestsCollection.insert(message);
+      }
+    },
+
+    startRecording: function(filterDetails) {
       console.log("Starting proxy recording");
+      if (!filterDetails.url) filterDetails["urls"] = ['http://*/*', 'https://*/*'];
+      if (!filterDetails.types) filterDetails["types"] = ['main_frame', 'sub_frame', 'object', 'xmlhttprequest', 'ping', 'other'];
       chrome.webRequest.onBeforeRequest.addListener(
-        this.boundedRecordRequest,
-        {
-          urls: ['http://*/*', 'https://*/*'],
-          types: ['main_frame', 'sub_frame', 'object', 'xmlhttprequest', 'ping', 'other'],
-          tabId: tabId
-        },
+        this.boundedRecordRequestBody,
+        filterDetails,
         ['requestBody']
+      );
+      chrome.webRequest.onSendHeaders.addListener(
+        this.boundedRecordRequestHeaders,
+        filterDetails,
+        ['requestHeaders']
       );
     },
 
-    'stopRecording': function() {
+    stopRecording: function() {
       console.log("Stopping proxy recording");
-      chrome.webRequest.onBeforeRequest.removeListener(this.boundedRecordRequest);
+      chrome.webRequest.onBeforeRequest.removeListener(this.boundedRecordRequestBody);
+      chrome.webRequest.onSendHeaders.removeListener(this.boundedRecordRequestHeaders);
     },
   };
 

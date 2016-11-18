@@ -82,7 +82,7 @@ var Pocuito = Pocuito || {};
         var tabId = tabs[0].id;
         var bgPage = chrome.extension.getBackgroundPage();
         if (bgPage && bgPage.proxy) {
-          bgPage.proxy.startRecording(tabId);
+          bgPage.proxy.startRecording({'tabId': tabId});
         }
       });
       this.requestsCollection.setState(2);

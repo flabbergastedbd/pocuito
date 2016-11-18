@@ -109,13 +109,12 @@ var Pocuito = Pocuito || {};
       if (cursorModel) {
         nextModel = this.at(this.indexOf(cursorModel)+1);
         var $this = this;
-        chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-          chrome.tabs.sendMessage(tabs[0].id, cursorModel.toJSON(), function(resp) {
-            console.log(resp);
-            if (nextModel && resp && resp['success']) {
-              $this.updateCursor(nextModel);
-            }
-          });
+        cursorModel.play(function(resp) {
+          if (nextModel && resp && resp['success']) {
+            $this.updateCursor(nextModel);
+          } else {
+            alert(JSON.stringify(resp));
+          }
         });
       }
     }

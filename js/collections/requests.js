@@ -59,9 +59,24 @@ var Pocuito = Pocuito || {};
     },
 
     insert: function(data) {
-      data['id'] = this.length + 1;
+      data['id'] = parseInt(data.requestId);
       this.create(data);
+    },
+
+    getAjaxRequest: function(url, method, data) {
+      var urlRegex = new RegExp(url);
+      var request = this.find(function(m) {
+        if (urlRegex.test(m.get('url')) && (method == m.get('method'))) {
+          return true;
+        }
+      });
+      if (request) {
+        return request.getJqueryAjaxFormat();
+      } else {
+        return null;
+      }
     }
+
   });
 
 })();

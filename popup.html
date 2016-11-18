@@ -3,13 +3,123 @@
 <head>
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
+<script type='text/html' id='template-request-filter-form'>
+<div class="form-group">
+  <label class="col-sm-2 control-label">URL</label>
+  <div class="col-sm-10">
+    <textarea type="text" class="form-control" id="urls" placeholder="URL with wildcards (Seperate by newline)">https://*/*</textarea>
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-sm-2 control-label">Resource Types</label>
+  <div class="col-sm-10">
+    <select multiple class="form-control" id='resourceTypes'>
+      <option value="main_frame" selected>main_frame</option>
+      <option value="sub_frame" selected>sub_frame</option>
+      <option value="object">object</option>
+      <option value="xmlhttprequest" selected>xmlhttprequest</option>
+      <option value="ping">ping</option>
+      <option value="other">other</option>
+    </select>
+  </div>
+</div>
+</script>
+
+<script type='text/html' id='template-tamper-form'>
+<div id='resourceFilter'></div>
+<div class="form-group">
+  <div class="col-sm-5">
+    <input type="text" class="form-control" id="key1" placeholder="Match">
+  </div>
+  <div class="col-sm-5">
+    <input type="text" class="form-control" id="value1" placeholder="Replace">
+  </div>
+</div>
+<div class="form-group">
+  <div class="col-sm-5">
+    <input type="text" class="form-control" id="key2" placeholder="Match">
+  </div>
+  <div class="col-sm-5">
+    <input type="text" class="form-control" id="value2" placeholder="Replace">
+  </div>
+</div>
+</script>
+
+<script type='text/html' id='template-proxy-form'>
+<div id='resourceFilter'></div>
+</script>
+
+<script type='text/html' id='template-assert-form'>
+<div class="form-group">
+  <label class="col-sm-2 control-label">URL</label>
+  <div class="col-sm-10">
+    <input type="text" class="form-control" id="url" placeholder="URL Regex">
+  </div>
+</div>
+<div class="form-group">
+  <label class="col-sm-2 control-label">HTTP Method</label>
+  <div class="col-sm-10">
+    <select class="form-control" id='method'>
+      <option value="GET" selected>GET</option>
+      <option value="POST">POST</option>
+      <option value="DELETE">DELETE</option>
+      <option value="PATCH">PATCH</option>
+      <option value="HEAD">HEAD</option>
+    </select>
+  </div>
+</div>
+<div class="form-group">
+  <div class="col-sm-5">
+    <select class="form-control" id="type1">
+      {{#types}}
+        <option value="{{.}}">{{.}}</option>
+      {{/types}}
+    </select>
+  </div>
+  <div class="col-sm-5">
+    <input type="text" class="form-control" id="text1" placeholder="Text">
+  </div>
+</div>
+<div class="form-group">
+  <div class="col-sm-5">
+    <select class="form-control" id="type2">
+      {{#types}}
+        <option value="{{.}}">{{.}}</option>
+      {{/types}}
+    </select>
+  </div>
+  <div class="col-sm-5">
+    <input type="text" class="form-control" id="text2" placeholder="Text">
+  </div>
+</div>
+</script>
+
+<script type='text/html' id='template-event-form'>
+<div class="row"><div class="col-sm-offset-1 col-sm-10">
+  <form class="form-horizontal">
+    <div class="form-group">
+      <label for="eventTypeFormSel">Select Event Type:</label>
+      <select class="form-control" id='eventTypeFormSel'>
+        {{#eventTypes}}
+          <option value="{{.}}">{{.}}</option>
+        {{/eventTypes}}
+      </select>
+    </div>
+    <div id="relevantEventForm"></div>
+    <div class="form-group">
+      <button class="btn btn-lg" type="submit" id="addEventBtn">Add</button>
+    </div>
+  </form>
+</div></div>
+</script>
+
 <script type='text/html' id='template-request-item'>
 <td>{{method}}</td>
 <td>{{url}}</td>
 </script>
 
 <script type='text/html' id='template-requests-table'>
-<div class='row'><div class='col-sm-12 table-responsive'>
+<div class='row'><div class='col-sm-12 table-responsive table-responsive-fixed-size'>
 <table class="table table-hover table-condensed">
 <thead>
   <tr>
@@ -29,16 +139,16 @@
 <div class="row">
   <div class="col-sm-offset-1 col-sm-10">
     <ul class="nav nav-pills" role="tablist">
-      <li><a href='#events' role="tab" data-toggle="tab">Events</a></li>
-      <li class="active"><a href='#proxy' role="tab" data-toggle="tab">Proxy</a></li>
+      <li class="active"><a href='#events' role="tab" data-toggle="tab">Events</a></li>
+      <li><a href='#proxy' role="tab" data-toggle="tab">Proxy</a></li>
     </ul>
   </div>
 </div>
 <div class="row">
   <div class="col-sm-offset-1 col-sm-10">
     <div class="tab-content">
-      <div role="tabpanel" class="tab-pane" id="events"></div>
-      <div role="tabpanel" class="tab-pane active" id="proxy"></div>
+      <div role="tabpanel" class="tab-pane active" id="events"></div>
+      <div role="tabpanel" class="tab-pane" id="proxy"></div>
     </div>
   </div>
 </div>
@@ -46,45 +156,51 @@
 
 <script type='text/html' id='template-proxy'>
 <div id='proxyTable'></div>
-{{#is_init}}
-<div class='row'>
-  <div class='col-sm-offset-4 col-sm-4'>
-    <button class='btn btn-lg btn-primary' id='recordRequestsBtn'>Record</button>
-  </div>
-</div>
-<br/>
-{{/is_init}}
-{{#is_recording}}
-<div class='row'>
-  <div class='col-sm-offset-4 col-sm-4'>
-    <button class='btn btn-lg btn-warning' id='stopRecordRequestsBtn'>Stop</button>
-  </div>
-</div>
-<br/>
-{{/is_recording}}
-<div class='row'>
-  <div class='col-sm-offset-4 col-sm-4'>
-    <button class='btn btn-lg btn-danger' id='resetBtn'>Reset</button>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="btn-group">
+      {{#is_init}}
+        <button class='btn btn-primary' id='recordRequestsBtn'>Record</button>
+      {{/is_init}}
+      {{#is_recording}}
+        <button class='btn btn-warning' id='stopRecordRequestsBtn'>Stop</button>
+      {{/is_recording}}
+      <button class='btn btn-danger' id='resetBtn'>Reset</button>
+    </div>
   </div>
 </div>
 </script>
 
 <script type='text/html' id='template-event-item'>
-<td>{{step}} <button class='btn btn-xs getCursorBtn'><span class="glyphicon {{#cursor}}glyphicon-menu-right{{/cursor}}{{^cursor}}glyphicon-minus{{/cursor}}"></span></button></td>
-<td>{{type}}</td>
-<td>{{#value}}{{value}}{{/value}}{{^value}}{{text}}{{/value}}</td>
-<td><button class='btn btn-xs btn-danger deleteEventBtn'><span class="glyphicon glyphicon-remove"></span></button></td>
+<td>
+  <div class="table-responsive">
+    <table class="table table-condensed">
+      <tbody>
+        <tr>
+          <td><button class='btn btn-xs getCursorBtn'><span class="glyphicon {{#cursor}}glyphicon-menu-right{{/cursor}}{{^cursor}}glyphicon-minus{{/cursor}}"></span></button></td>
+          <td>{{toString}}</td>
+          <td><button class='btn btn-xs btn-danger deleteEventBtn'><span class="glyphicon glyphicon-remove"></span></button></td>
+        </tr>
+        {{#cursor}}
+          <tr>
+            <td colspan='3'>
+              <label class="control-label">Comments</label>
+              <textarea class='form-control eventDescription'>{{description}}</textarea>
+            </td>
+          </tr>
+        {{/cursor}}
+      </tbody>
+    </table>
+  </div>
+</td>
 </script>
 
 <script type='text/html' id='template-events-table'>
-<div class='row'><div class='col-sm-12 table-responsive'>
+<div class='row'><div class='col-sm-12 table-responsive table-responsive-fixed-size'>
 <table class="table table-hover table-condensed">
 <thead>
   <tr>
-    <th></th>
     <th>Event</th>
-    <th>Value</th>
-    <th></th>
   </tr>
 </thead>
 <tbody>
@@ -95,50 +211,45 @@
 
 <script type='text/html' id='template-main'>
 <br/>
-<div id='main'></div>
+<div id='eventForm'></div>
 <br/>
-{{#is_init}}
-<div class='row'>
-  <div class='col-sm-offset-4 col-sm-4'>
-    <button class='btn btn-lg btn-primary' id='recordPocBtn'>Record</button>
+{{^events.length}}
+  <div class="row">
+    <div class="form-group">
+      <label class="control-label">Load Poc</label>
+      <input type='file' class='btn' id='loadPocBtn' value='Load Poc'>
+    </div>
   </div>
-</div>
+{{/events.length}}
+<div id='eventsTable'></div>
 <br/>
-<div class='row'>
-  <div class='col-sm-offset-4 col-sm-4'>
-    <button class='btn btn-lg btn-warning' id='replayPocBtn'>Replay</button>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="btn-toolbar">
+      <div class="btn-group">
+        {{#is_init}}
+          <button class='btn btn-primary' id='recordPocBtn'>Record User Actions</button>
+        {{/is_init}}
+        {{^is_init}}
+          {{#is_paused}}
+            <button class='btn btn-primary' id='recordPocBtn'>Record User Actions</button>
+            {{#events.length}}
+              <button class='btn btn-info' id='playPocStepBtn'>Play Step</button>
+            {{/events.length}}
+          {{/is_paused}}
+          {{^is_paused}}
+            <button class='btn' id='pausePocBtn'>Pause</button>
+          {{/is_paused}}
+        {{/is_init}}
+        {{#events.length}}
+          <button class='btn btn-primary' id='downloadPocBtn'>Download</button>
+        {{/events.length}}
+        <button class='btn btn-warning' id='showEventFormBtn'>Add Event</button>
+        <button class='btn btn-danger' id='resetPocBtn'>Reset</button>
+      </div>
+    </div>
   </div>
 </div>
-{{/is_init}}
-{{^is_init}}
-  {{^is_paused}}
-    <div class='row'>
-      <div class='col-sm-offset-4 col-sm-4'>
-        <button class='btn-lg btn' id='pausePocBtn'>Pause</button>
-      </div>
-    </div>
-    <br/>
-  {{/is_paused}}
-  {{#is_paused}}
-    <div class='row'>
-      <div class='col-sm-offset-4 col-sm-4'>
-        <button class='btn-lg btn btn-primary' id='playPocStepBtn'>Play Step</button>
-      </div>
-    </div>
-    <br/>
-    <div class='row'>
-      <div class='col-sm-offset-4 col-sm-4'>
-        <button class='btn-lg btn' id='recordPocBtn'>Resume</button>
-      </div>
-    </div>
-    <br/>
-  {{/is_paused}}
-<div class='row'>
-  <div class='col-sm-offset-4 col-sm-4'>
-    <button class='btn-lg btn btn-danger' id='resetPocBtn'>Reset</button>
-  </div>
-</div>
-{{/is_init}}
 </script>
 
 <script type='text/html' id='template-recorder'>
@@ -170,6 +281,7 @@ Replayer
 <script src='/js/views/recorder.js'></script>
 <script src='/js/views/replayer.js'></script>
 <script src='/js/views/events.js'></script>
+<script src='/js/views/event_form.js'></script>
 <script src='/js/views/proxy.js'></script>
 <script src='/js/views/main.js'></script>
 </head>
