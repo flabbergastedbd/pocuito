@@ -100,6 +100,7 @@
     <div class="form-group">
       <label for="eventTypeFormSel">Select Event Type:</label>
       <select class="form-control" id='eventTypeFormSel'>
+          <option value='' selected disabled>Please select one</option>
         {{#eventTypes}}
           <option value="{{.}}">{{.}}</option>
         {{/eventTypes}}
@@ -108,6 +109,7 @@
     <div id="relevantEventForm"></div>
     <div class="form-group">
       <button class="btn btn-lg" type="submit" id="addEventBtn">Add</button>
+      <button class="btn btn-lg" id="removeEventFormBtn">Cancel</button>
     </div>
   </form>
 </div></div>
@@ -137,15 +139,17 @@
 <script type="text/html" id='template-root'>
 <br/>
 <div class="row">
-  <div class="col-sm-offset-1 col-sm-10">
+  <div class="col-sm-6">
     <ul class="nav nav-pills" role="tablist">
       <li class="active"><a href='#events' role="tab" data-toggle="tab">Events</a></li>
       <li><a href='#proxy' role="tab" data-toggle="tab">Proxy</a></li>
     </ul>
   </div>
+  <div class="col-sm-offset-1 col-sm-5" id='status'>
+  </div>
 </div>
 <div class="row">
-  <div class="col-sm-offset-1 col-sm-10">
+  <div class="col-sm-10">
     <div class="tab-content">
       <div role="tabpanel" class="tab-pane active" id="events"></div>
       <div role="tabpanel" class="tab-pane" id="proxy"></div>
@@ -209,6 +213,18 @@
 </div></div>
 </script>
 
+<script type='text/html' id='template-status'>
+{{#is_info}}
+<span class='alert alert-info' role='alert'>{{msg}}</span>
+{{/is_info}}
+{{#is_warning}}
+<span class='alert alert-warning' role='alert'>{{msg}}</span>
+{{/is_warning}}
+{{#is_error}}
+<span class='alert alert-danger' role='alert'>{{msg}}</span>
+{{/is_error}}
+</script>
+
 <script type='text/html' id='template-main'>
 <br/>
 <div id='eventForm'></div>
@@ -237,25 +253,18 @@
   <div class="col-sm-12">
     <div class="btn-toolbar">
       <div class="btn-group">
+        {{#is_recording}}
+          <button class='btn' id='pausePocBtn'>Pause Recording</button>
+        {{/is_recording}}
         {{#is_init}}
           <button class='btn btn-primary' id='recordPocBtn'>Record User Actions</button>
+          {{#events.length}}
+            <button class='btn btn-info' id='playPocStepBtn'>Play Step</button>
+            <button class='btn btn-danger' id='resetPocBtn'>Reset</button>
+            <button class='btn btn-warning' id='showEventFormBtn'>Add Event</button>
+            <button class='btn btn-primary' id='downloadPocBtn'>Download</button>
+          {{/events.length}}
         {{/is_init}}
-        {{^is_init}}
-          {{#is_paused}}
-            <button class='btn btn-primary' id='recordPocBtn'>Record User Actions</button>
-            {{#events.length}}
-              <button class='btn btn-info' id='playPocStepBtn'>Play Step</button>
-            {{/events.length}}
-          {{/is_paused}}
-          {{^is_paused}}
-            <button class='btn' id='pausePocBtn'>Pause</button>
-          {{/is_paused}}
-        {{/is_init}}
-        {{#events.length}}
-          <button class='btn btn-primary' id='downloadPocBtn'>Download</button>
-        {{/events.length}}
-        <button class='btn btn-warning' id='showEventFormBtn'>Add Event</button>
-        <button class='btn btn-danger' id='resetPocBtn'>Reset</button>
       </div>
     </div>
   </div>
@@ -282,6 +291,8 @@ Replayer
 <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.min.css'/>
 <link rel='stylesheet' href='/css/pocuito.css'/>
 
+<script src='/js/logging.js'></script>
+
 <script src='/js/models/event.js'></script>
 <script src='/js/models/request.js'></script>
 
@@ -291,6 +302,7 @@ Replayer
 <script src='/js/views/recorder.js'></script>
 <script src='/js/views/replayer.js'></script>
 <script src='/js/views/events.js'></script>
+<script src='/js/views/status.js'></script>
 <script src='/js/views/event_form.js'></script>
 <script src='/js/views/proxy.js'></script>
 <script src='/js/views/main.js'></script>

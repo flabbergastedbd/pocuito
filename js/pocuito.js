@@ -1,5 +1,7 @@
 var Pocuito = Pocuito || {};
 
+logger = new Pocuito.Logger();  // Create logger which uses backbone.radio
+
 (function () {
 	'use strict';
 
@@ -13,12 +15,14 @@ var Pocuito = Pocuito || {};
     el: '.container',
     regions: {
       eventsRegion: '#events',
-      proxyRegion: '#proxy'
+      proxyRegion: '#proxy',
+      statusRegion: '#status'
     },
 
     onRender: function() {
       this.showChildView('eventsRegion', new Pocuito.MainView());
       this.showChildView('proxyRegion', new Pocuito.ProxyView());
+      this.showChildView('statusRegion', new Pocuito.StatusView());
     }
   });
 

@@ -133,6 +133,7 @@ var Pocuito = Pocuito || {};
         var mData = {};
         mData[this.forms[this.type][1]] = eData;
         this.collection.insertAfterCursor(mData);
+        logger.info('Event added');
       }
     }
   });

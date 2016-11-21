@@ -11,22 +11,13 @@ var PocuitoBackground = (function() {
       var $this = this;
       // This are events sent from Content Script
       chrome.runtime.onMessage.addListener(function(message) {
-        $this.refresh(function() {
+        $this.eventsCollection.refresh(function() {
           var state = $this.eventsCollection.getStateObj();
           if (state.is_recording) {
             $this.eventsCollection.insertAfterCursor(message);
           }
         });
       });
-    },
-
-    'refresh': function(callback) {
-      this.eventsCollection.fetch({"success": callback});
-    },
-
-    'reset': function() {
-      this.eventsCollection.clear();
-      this.refresh();
     }
   };
 

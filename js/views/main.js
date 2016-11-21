@@ -9,14 +9,13 @@ var Pocuito = Pocuito || {};
       'eventForm': '#eventForm'
     },
     template: '#template-main',
-		recorderView: null,
-		replayerView: null,
 
     events: {
       'click #recordPocBtn': 'recordPoc',
       'click #pausePocBtn': 'pausePoc',
       'click #playPocStepBtn': 'playPocStep',
       'click #showEventFormBtn': 'showEventForm',
+      'click #removeEventFormBtn': 'removeEventForm',
       'click #resetPocBtn': 'reset',
       'click #downloadPocBtn': 'downloadPoc',
       'click #openInNewTabBtn': 'openInNewTab',
@@ -59,7 +58,6 @@ var Pocuito = Pocuito || {};
 
     reset: function(e) {
       this.eventsCollection.clear();
-      this.eventsCollection.setState(1);
     },
 
     downloadPoc: function(e) {
@@ -80,19 +78,19 @@ var Pocuito = Pocuito || {};
       this.eventsCollection.setState(2);
     },
     pausePoc: function(e) {
-      this.eventsCollection.setState(3);
+      this.eventsCollection.setState(1);
     },
 
     playPocStep: function(e) {
       this.eventsCollection.playStep();
     },
 
-    replayPoc: function(e) {
-      this.eventsCollection.setState(4);
-    },
-
     showEventForm: function(e) {
       this.showChildView('eventForm', new Pocuito.EventFormPickerView({'collection': this.eventsCollection}));
+    },
+
+    removeEventForm: function(e) {
+      this.detachChildView('eventForm');
     },
 
 		onRender: function() {

@@ -21,7 +21,7 @@ var Pocuito = Pocuito || {};
     childView: Pocuito.RequestView,
 
     initialize: function() {
-      this.collection.on('change add remove', this.render);
+      this.a = null;
     }
   });
 
@@ -64,7 +64,7 @@ var Pocuito = Pocuito || {};
       // State change needs button change on interface,
       // but model or collection changes are handled
       // at CollectionView level
-      this.requestsCollection.on('change', this.render);
+      this.requestsCollection.on('change add remove', this.render);
     },
 
     templateContext: function() {

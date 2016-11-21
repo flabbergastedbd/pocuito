@@ -4,8 +4,7 @@ var Pocuito = Pocuito || {};
 	'use strict';
   var STATE_INIT = 1;
   var STATE_RECORDING = 2;
-  var STATE_PAUSED = 3;
-  var STATE_REPLAYING = 4;
+  var STATE_REPLAYING = 3;
 
   Pocuito.Events = Backbone.Collection.extend({
     model: Pocuito.Event,
@@ -21,7 +20,6 @@ var Pocuito = Pocuito || {};
         m = this.get(i)
         if (m) m.destroy();
       }, this);
-      this.setState(STATE_INIT);
     },
 
     getItem: function(k) {
@@ -81,7 +79,6 @@ var Pocuito = Pocuito || {};
         }
       }, this);
 
-      data['id'] = this.length + 1;
       data['cursor'] = true;
       data['step'] = step;
       this.create(data);
@@ -93,8 +90,6 @@ var Pocuito = Pocuito || {};
       return {
         is_init: s === STATE_INIT,
         is_recording: s === STATE_RECORDING,
-        is_paused: s === STATE_PAUSED,
-        is_replaying: s === STATE_REPLAYING,
         events: this.toJSON()
       };
     },
@@ -110,10 +105,11 @@ var Pocuito = Pocuito || {};
         nextModel = this.at(this.indexOf(cursorModel)+1);
         var $this = this;
         cursorModel.play(function(resp) {
-          if (nextModel && resp && resp['success']) {
-            $this.updateCursor(nextModel);
+          if (resp && resp['success']) {
+            logger.info('Step execution is success');
+            if (nextModel) $this.updateCursor(nextModel);
           } else {
-            alert(JSON.stringify(resp));
+            logger.error('Step execution failed');
           }
         });
       }
