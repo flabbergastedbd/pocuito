@@ -214,12 +214,22 @@
 <div id='eventForm'></div>
 <br/>
 {{^events.length}}
-  <div class="row">
-    <div class="form-group">
-      <label class="control-label">Load Poc</label>
-      <input type='file' class='btn' id='loadPocBtn' value='Load Poc'>
+  {{#is_popup}}
+    <div class="row">
+      <div class="form-group">
+        <label class="control-label">Load Poc (Will open a new tab, upload there)</label>
+        <button class='btn btn-primary form-control' id='openInNewTabBtn'>Load Poc</button>
+      </div>
     </div>
-  </div>
+  {{/is_popup}}
+  {{^is_popup}}
+    <div class="row">
+      <div class="form-group">
+        <label class="control-label">Load Poc</label>
+        <input type='file' id='pocFile'>
+      </div>
+    </div>
+  {{/is_popup}}
 {{/events.length}}
 <div id='eventsTable'></div>
 <br/>

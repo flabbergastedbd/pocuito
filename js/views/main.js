@@ -14,12 +14,13 @@ var Pocuito = Pocuito || {};
 
     events: {
       'click #recordPocBtn': 'recordPoc',
-      'click #loadPocBtn': 'loadPoc',
       'click #pausePocBtn': 'pausePoc',
       'click #playPocStepBtn': 'playPocStep',
       'click #showEventFormBtn': 'showEventForm',
       'click #resetPocBtn': 'reset',
-      'click #downloadPocBtn': 'downloadPoc'
+      'click #downloadPocBtn': 'downloadPoc',
+      'click #openInNewTabBtn': 'openInNewTab',
+      'change #pocFile': 'loadPoc'
     },
 
     initialize: function() {
@@ -28,18 +29,31 @@ var Pocuito = Pocuito || {};
       this.eventsCollection.on('change add remove', this.render);
 
       this.eventsCollection.refresh(this.render);
-
     },
 
-    loadPoc: function() {
-      var bgPage = chrome.extension.getBackgroundPage();
-      if (bgPage && bgPage.background) {
-        bgPage.background.loadPocFile();
+    openInNewTab: function() {
+      var url = chrome.extension.getURL('/popup.html');
+      chrome.tabs.create({'url': url});
+    },
+
+    loadPoc: function(e) {
+      if (e.target.files.length > 0) {
+        var file = e.target.files[0];
+        var reader = new FileReader();
+        var $this = this;
+        reader.onload = function(e1) {
+          var eventsArray = JSON.parse(e1.target.result);
+          _.each(eventsArray, function(v, i) {
+            $this.eventsCollection.create(v);
+          }, this);
+        };
+        reader.readAsText(file);
       }
     },
 
     templateContext: function() {
       var state = this.eventsCollection.getStateObj();
+      state['is_popup'] = (location.href.indexOf('popup=true') != -1);
       return state;
     },
 
