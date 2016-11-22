@@ -6,6 +6,7 @@ var Pocuito = Pocuito || {};
   var LOG_LEVELS = {
     'error': 40,
     'warning': 30,
+    'success': 25,
     'info': 20,
     'debug': 10
   }

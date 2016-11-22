@@ -12,6 +12,10 @@ var Pocuito = Pocuito || {};
       this.logChannel.request('info', msg);
     },
 
+    'success': function(msg) {
+      this.logChannel.request('success', msg);
+    },
+
     'debug': function(msg) {
       this.logChannel.request('debug', msg);
     },

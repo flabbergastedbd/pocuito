@@ -106,7 +106,7 @@ var Pocuito = Pocuito || {};
         var $this = this;
         cursorModel.play(function(resp) {
           if (resp && resp['success']) {
-            logger.info('Step execution is success');
+            logger.success(resp['message'] || 'Step execution is success');
             if (nextModel) $this.updateCursor(nextModel);
           } else {
             logger.error('Step execution failed');

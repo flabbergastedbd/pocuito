@@ -73,6 +73,7 @@ function getElement(m) {
           $(e).trigger('change');
         }
         resp['success'] = true;
+        resp['message'] = request['type'] + ' executed';
       } else {
         console.log("Step failed!!");
         console.log(request);

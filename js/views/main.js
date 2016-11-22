@@ -63,14 +63,13 @@ var Pocuito = Pocuito || {};
     downloadPoc: function(e) {
       var $this = this;
       this.eventsCollection.refresh(function() {
-        var a = $('<a/>', {
-          'download': 'pocuito.txt',
+        var a = $('<a>', {
+          'download': 'pocuito.json',
           'href': 'data:application/json,' + JSON.stringify($this.eventsCollection.toJSON()),
           'text': 'Download File'
         });
         $this.$el.append(a);
         a[0].click();
-        $this.$el.remove(a);
       });
     },
 

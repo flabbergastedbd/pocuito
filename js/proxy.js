@@ -25,6 +25,15 @@ var PocuitoProxy = (function() {
     // Called before thee headers one
     recordRequestBody: function(message) {
       console.log(message);
+      if (message && message.requestBody && message.requestBody.raw) {
+        var b64Strings = [];
+        _.each(message.requestBody.raw, function(item, i) {
+          var str = ''
+          if (item.bytes) str = base64ArrayBuffer(item.bytes);
+          b64Strings.push({base64String: str});
+        }, this);
+        message.requestBody.raw = b64Strings;
+      }
       this.insertOrUpdate(message, 'requestBody');
     },
 

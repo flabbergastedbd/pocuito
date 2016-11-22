@@ -94,7 +94,10 @@ var Pocuito = Pocuito || {};
           var data = $this.get('start_proxy')
           data['tabId'] = tabId;
           bgPage.proxy.startRecording(data);
-          callback({'success': true});
+          callback({
+            'success': true,
+            'message': 'Proxy service started'
+          });
         }
       });
     },
@@ -103,7 +106,10 @@ var Pocuito = Pocuito || {};
       var bgPage = chrome.extension.getBackgroundPage();
       if (bgPage && bgPage.proxy) {
         bgPage.proxy.stopRecording();
-        callback({'success': true});
+        callback({
+          'success': true,
+          'message': 'Proxy service stopped'
+        });
       }
     },
 
@@ -142,7 +148,10 @@ var Pocuito = Pocuito || {};
         _.each(data['assertions'], function(r, type) {
           success = success || $this.assert(type, r, item);
         }, $this);
-        callback({"success": success})
+        callback({
+          "success": success,
+          "message": "Assert is " + success.toString()
+        })
       });
     }
 
