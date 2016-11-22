@@ -34,7 +34,7 @@
       "/bower_components/jquery/dist/jquery.min.js",
       "/bower_components/underscore/underscore-min.js",
       "/bower_components/backbone/backbone-min.js",
-      "/vendor/js/backbone.chromestorage.min.js",
+      "/bower_components/backbone.ChromeStorage/backbone.chromestorage.min.js",
       "/js/models/event.js",
       "/js/collections/events.js",
       "/js/background.js",
