@@ -3,21 +3,25 @@
 
   "name": "PoCuito",
   "description": "This extension allows you to record and replay Proof of Concepts related to security testing",
-  "version": "1.0",
+  "version": "0.1",
 
   "browser_action": {
-    "default_icon": "images/icon.png",
+    "default_icon": "images/icons/icon128.png",
     "default_popup": "popup.html?popup=true"
+  },
+  "icons": {
+     "48": "images/icons/icon48.png",
+     "128": "images/icons/icon128.png"
   },
   "content_security_policy": "default-src 'self'; script-src 'self'; connect-src *",
   "permissions": [
     "webRequest",
-    "http://*/*",
-    "https://*/*"
+    "<all_urls>"
   ],
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*"],
+      "matches": ["<all_urls>"],
+      "all_frames": true,
       "js": [
         "/bower_components/jquery/dist/jquery.min.js",
         "/js/content_script.js"
