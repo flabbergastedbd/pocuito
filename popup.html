@@ -139,13 +139,16 @@
 <script type="text/html" id='template-root'>
 <br/>
 <div class="row">
-  <div class="col-sm-6">
-    <ul class="nav nav-pills" role="tablist">
+  <div class="col-sm-4">
+    <ul class="nav nav-tabs" role="tablist">
       <li class="active"><a href='#events' role="tab" data-toggle="tab">Events</a></li>
       <li><a href='#proxy' role="tab" data-toggle="tab">Proxy</a></li>
     </ul>
   </div>
-  <div class="col-sm-offset-1 col-sm-5" id='status'>
+  <div class="col-sm-6" id='status'>
+  </div>
+  <div class="col-sm-2">
+    <button class="btn btn-default" id='resetPocuitoBtn'>Reset All</button>
   </div>
 </div>
 <div class="row">
@@ -169,25 +172,25 @@
       {{#is_recording}}
         <button class='btn btn-warning' id='stopRecordRequestsBtn'>Stop</button>
       {{/is_recording}}
-      <button class='btn btn-danger' id='resetBtn'>Reset</button>
+      <button class='btn btn-danger' id='resetProxyBtn'>Reset Requests</button>
+      <button class='btn' id='refreshProxyBtn'>Refresh</button>
     </div>
   </div>
 </div>
 </script>
 
 <script type='text/html' id='template-event-item'>
+<td><button class='btn btn-xs getCursorBtn'><span class="glyphicon {{#cursor}}glyphicon-menu-right{{/cursor}}"></span></button></td>
 <td>
   <div class="table-responsive">
     <table class="table table-condensed">
       <tbody>
         <tr>
-          <td><button class='btn btn-xs getCursorBtn'><span class="glyphicon {{#cursor}}glyphicon-menu-right{{/cursor}}{{^cursor}}glyphicon-minus{{/cursor}}"></span></button></td>
           <td>{{toString}}</td>
-          <td><button class='btn btn-xs btn-danger deleteEventBtn'><span class="glyphicon glyphicon-remove"></span></button></td>
         </tr>
         {{#cursor}}
           <tr>
-            <td colspan='3'>
+            <td>
               <label class="control-label">Comments</label>
               <textarea class='form-control eventDescription'>{{description}}</textarea>
             </td>
@@ -197,6 +200,7 @@
     </table>
   </div>
 </td>
+<td><button class='btn btn-xs btn-danger deleteEventBtn'><span class="glyphicon glyphicon-remove"></span></button></td>
 </script>
 
 <script type='text/html' id='template-events-table'>
@@ -204,7 +208,9 @@
 <table class="table table-hover table-condensed">
 <thead>
   <tr>
+    <th></th>
     <th>Event</th>
+    <th></th>
   </tr>
 </thead>
 <tbody>
@@ -264,7 +270,7 @@
             <button class='btn btn-warning' id='showEventFormBtn'>Add Event</button>
           {{#events.length}}
             <button class='btn btn-info' id='playPocStepBtn'>Play Step</button>
-            <button class='btn btn-danger' id='resetPocBtn'>Reset</button>
+            <button class='btn btn-danger' id='resetPocBtn'>Reset Events</button>
             <button class='btn btn-primary' id='downloadPocBtn'>Download</button>
           {{/events.length}}
         {{/is_init}}

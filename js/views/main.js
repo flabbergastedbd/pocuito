@@ -65,7 +65,7 @@ var Pocuito = Pocuito || {};
       this.eventsCollection.refresh(function() {
         var a = $('<a>', {
           'download': 'pocuito.json',
-          'href': 'data:application/json,' + JSON.stringify($this.eventsCollection.toJSON()),
+          'href': 'data:application/json,' + encodeURIComponent(JSON.stringify($this.eventsCollection.toJSON())),
           'text': 'Download File'
         });
         $this.$el.append(a);

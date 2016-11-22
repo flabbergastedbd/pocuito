@@ -53,18 +53,20 @@ var Pocuito = Pocuito || {};
     events: {
       'click #recordRequestsBtn': 'startRecording',
       'click #stopRecordRequestsBtn': 'stopRecording',
-      'click #resetBtn': 'reset'
+      'click #resetProxyBtn': 'reset',
+      'click .refreshProxyBtn': 'refresh'
     },
 
     initialize: function() {
       this.requestsCollection = new Pocuito.Requests();
 
-      this.requestsCollection.refresh(this.render);
+      this.refresh();
 
-      // State change needs button change on interface,
-      // but model or collection changes are handled
-      // at CollectionView level
       this.requestsCollection.on('change add remove', this.render);
+    },
+
+    refresh: function() {
+      this.requestsCollection.refresh(this.render);
     },
 
     templateContext: function() {
@@ -74,7 +76,6 @@ var Pocuito = Pocuito || {};
 
     reset: function(e) {
       this.requestsCollection.clear();
-      this.stopRecording();
     },
 
     startRecording: function(e) {

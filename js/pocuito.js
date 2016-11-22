@@ -19,10 +19,23 @@ logger = new Pocuito.Logger();  // Create logger which uses backbone.radio
       statusRegion: '#status'
     },
 
+    events: {
+      'click #resetPocuitoBtn': 'resetChildren'
+    },
+
     onRender: function() {
       this.showChildView('eventsRegion', new Pocuito.MainView());
       this.showChildView('proxyRegion', new Pocuito.ProxyView());
       this.showChildView('statusRegion', new Pocuito.StatusView());
+    },
+
+    resetChildren: function() {
+      _.each(_.keys(this.regions), function(region) {
+        var view = this.getChildView(region);
+        if (view && view.reset) {
+          view.reset();
+        }
+      }, this);
     }
   });
 
