@@ -75,9 +75,18 @@ var Pocuito = Pocuito || {};
     },
 
     recordPoc: function(e) {
+      var bgPage = chrome.extension.getBackgroundPage();
+      if (bgPage && bgPage.background) {
+        bgPage.background.startRecording();
+      }
       this.eventsCollection.setState(2);
     },
+
     pausePoc: function(e) {
+      var bgPage = chrome.extension.getBackgroundPage();
+      if (bgPage && bgPage.background) {
+        bgPage.background.stopRecording();
+      }
       this.eventsCollection.setState(1);
     },
 

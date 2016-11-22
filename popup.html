@@ -258,10 +258,10 @@
         {{/is_recording}}
         {{#is_init}}
           <button class='btn btn-primary' id='recordPocBtn'>Record User Actions</button>
+            <button class='btn btn-warning' id='showEventFormBtn'>Add Event</button>
           {{#events.length}}
             <button class='btn btn-info' id='playPocStepBtn'>Play Step</button>
             <button class='btn btn-danger' id='resetPocBtn'>Reset</button>
-            <button class='btn btn-warning' id='showEventFormBtn'>Add Event</button>
             <button class='btn btn-primary' id='downloadPocBtn'>Download</button>
           {{/events.length}}
         {{/is_init}}
@@ -283,10 +283,10 @@ Replayer
 <script src='/bower_components/bootstrap/dist/js/bootstrap.min.js'></script>
 <script src='/bower_components/underscore/underscore-min.js'></script>
 <script src='/bower_components/mustache.js/mustache.min.js'></script>
-<script src='/bower_components/backbone/backbone-min.js'></script>
-<script src='/bower_components/backbone.localStorage/backbone.localStorage-min.js'></script>
+<script src='/bower_components/backbone/backbone.js'></script>
 <script src='/bower_components/backbone.radio/build/backbone.radio.min.js'></script>
 <script src='/bower_components/backbone.marionette/lib/backbone.marionette.min.js'></script>
+<script src='/vendor/js/backbone.chromestorage.min.js'></script>
 
 <link rel='stylesheet' href='/bower_components/bootstrap/dist/css/bootstrap.min.css'/>
 <link rel='stylesheet' href='/css/pocuito.css'/>

@@ -8,7 +8,7 @@ var Pocuito = Pocuito || {};
 
   Pocuito.Requests = Backbone.Collection.extend({
     model: Pocuito.Request,
-    localStorage: new Backbone.LocalStorage("Requests"),
+    chromeStorage: new Backbone.ChromeStorage("Requests"),
 
     initialize: function() {
       this.a = null;

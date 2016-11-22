@@ -3,22 +3,24 @@ var PocuitoBackground = (function() {
 
 
   function PocuitoBackground() {
-    this.eventsCollection = new Pocuito.Events();
+    this.boundedRecord = this.record.bind(this);
   }
 
   PocuitoBackground.prototype = {
-    'listen': function() {
-      var $this = this;
-      // This are events sent from Content Script
-      chrome.runtime.onMessage.addListener(function(message) {
-        $this.eventsCollection.refresh(function() {
-          var state = $this.eventsCollection.getStateObj();
-          if (state.is_recording) {
-            $this.eventsCollection.insertAfterCursor(message);
-          }
-        });
+    startRecording: function() {
+      chrome.runtime.onMessage.addListener(this.boundedRecord);
+    },
+
+    stopRecording: function() {
+      chrome.runtime.onMessage.removeListener(this.boundedRecord);
+    },
+
+    record: function(message) {
+      var eventsCollection = new Pocuito.Events();
+      eventsCollection.refresh(function(collection, response, options) {
+        eventsCollection.insertAfterCursor(message);
       });
-    }
+    },
   };
 
   return PocuitoBackground;
@@ -26,4 +28,3 @@ var PocuitoBackground = (function() {
 })();
 
 var background = new PocuitoBackground();
-background.listen();

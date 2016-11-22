@@ -42,7 +42,8 @@ var Pocuito = Pocuito || {};
     toString: function() {
       var str = '';
       if (this.get('xpath')) {
-        str += this.get('type') + ' --> ' + (this.get('value') ? this.get('value') : this.get('xpath'));
+        var s = this.get('value') || this.get('text') || this.get('xpath');
+        str += this.get('type') + ' --> ' + s;
       } else if (this.get('tamper_req_header')) {
         str += 'Tamper request header values on ' + this.get('tamper_req_header')['urls'].join(',') + ' ' + JSON.stringify(this.get('tamper_req_header')['replacements']);
       } else if (this.get('tamper_req_body')) {

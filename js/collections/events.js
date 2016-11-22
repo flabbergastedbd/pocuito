@@ -8,11 +8,7 @@ var Pocuito = Pocuito || {};
 
   Pocuito.Events = Backbone.Collection.extend({
     model: Pocuito.Event,
-    localStorage: new Backbone.LocalStorage("Events"),
-
-    initialize: function() {
-      this.a = null;
-    },
+    chromeStorage: new Backbone.ChromeStorage("Events"),
 
     clear: function() {
       var m;
@@ -58,7 +54,7 @@ var Pocuito = Pocuito || {};
     },
 
     refresh: function(callback) {
-      this.fetch({"success": callback, "reset": true});
+      this.fetch({"success": callback, "add": true, "remove": true, "change": true});
     },
 
     insertAfterCursor: function(data) {
@@ -79,6 +75,10 @@ var Pocuito = Pocuito || {};
         }
       }, this);
 
+      // Don't use length because different lengths are present in different collection instances
+      // i.e Background and popup
+      var maxIdModel = this.max(function(m) { return m.get('id'); });
+      data['id'] = (maxIdModel != -Infinity) ? (maxIdModel.get("id")+1) : 1;
       data['cursor'] = true;
       data['step'] = step;
       this.create(data);
