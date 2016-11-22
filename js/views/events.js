@@ -25,7 +25,11 @@ var Pocuito = Pocuito || {};
     },
 
     deleteModel: function() {
-      this.model.destroy();
+      var cursor = this.model.get('cursor');
+      var collection = this.model.collection;
+      this.model.destroy({'success': function() {
+        if (cursor && collection.last()) collection.updateCursor(collection.last());
+      }});
     },
 
     getCursor: function() {
