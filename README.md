@@ -13,7 +13,12 @@ most of the time, so just record the poc, distribute and replay it whenever nece
 
 ### Installation
 
++ Download & Install [CRX](https://github.com/tunnelshade/pocuito/releases/download/v0.1/pocuito.crx)
+
+or
+
 + Clone the repository
++ Install bower dependencies `bower install`
 + Open Chrome extension settings
 + Enable developer mode checkbox
 + Click on load unpacked extension and browse to root directory
@@ -34,64 +39,18 @@ Let us take an example of a poc where we search in github and verify that our se
 
 To replay any step just select a step and click on **Play Step**.
 
-### Buttons
+More Docs: [Events](/docs/events.md), [Buttons](/docs/buttons.md)
 
-#### Global
+### Roadmap
 
-+ **Reset**: Reset everything i.e clear event and proxy log completely. (Highly suggested while playing a new poc)
-
-#### Event Log
-
-+ **Record User Actions**: Start recording user input events
-+ **Pause Recording**: Temporarily stop recording user input events
-+ **Add Event**: Add different kinds of events like starting proxy, asserting response body etc.. . New event will be added after the event with cursor.
-+ **Play Step**: Execute one event that is under the cursor
-+ **Reset Events**: Clear all the events (NOTE: Reset the proxy as well, or click reset on the top when doing this)
-+ **Download**: Download the poc as a file
-+ **Load Poc**: Upload a POC file
-
-#### Proxy Log
-
-+ **Record**: Start recording requests
-+ **Stop**: Stop recording requests
-+ **Reset Requests**: Clear request log
-
-### Events
-
-#### User Actions
-
-User actions (click and change events) can be recorded when the extension is in recording mode. Recording mode can be started by
-clicking on record user actions button.
-
-#### Start Proxy
-
-Starting proxy will record all requests according to the url and request pattern provided. The recorded request will be later used for
-asserting response attributes.
-
-#### Stop Proxy
-
-Stopping proxy is only an event to prevent wastage of space and callbacks.
-
-#### Assert Response Status
-
-Asserting a response status line with provided regexes. The first recorded request matching the filter criteria will be tested.
-
-#### Assert Response Header
-
-Asserting response headers with provided regexes. The first recorded request matching the filter criteria will be tested.
-
-#### Assert Response Body
-
-Asserting response body with provided regexes. The first recorded request matching the filter criteria will be tested.
-
-### TBD
+#### v0.2
 
 + Add more events like tamper request body (Have to search more for how to do it in chrome extensions)
 + Move to typescript or coffeescript?
 + Add Unit Tests?
 + Add to webstore?
 
-### AUTHOR
+### Author
 
 Bharadwaj Machiraju
 
