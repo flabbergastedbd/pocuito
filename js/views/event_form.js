@@ -134,6 +134,8 @@ var Pocuito = Pocuito || {};
         mData[this.forms[this.type][1]] = eData;
         this.collection.insertAfterCursor(mData);
         logger.info('Event added');
+        // The newly added event will have cursor, so play it
+        this.collection.playStep();
       }
     }
   });
