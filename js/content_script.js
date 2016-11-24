@@ -47,6 +47,8 @@ function getElement(m) {
 (function() {
 	$(document).on('click change', function(e) {
     var elem = $(e.target);
+    var data = {};
+    // Event added if at all execution reaches here
     var xpath = getElementXPath(elem[0]);
 		chrome.runtime.sendMessage(null, {
       "url": document.location.href,
@@ -79,22 +81,6 @@ function getElement(m) {
         console.log(request);
       }
       sendResponse(resp);
-    } else if (request['method']) { // Ajax data
-      request['dataType'] = 'text';
-      $.ajax(request).done(function(response, statusText, jqxhr) {
-        var status = jqxhr.statusCode() + ' ' + statusText;
-        var headers = jqxhr.getAllResponseHeaders();
-        /*
-        console.log(status);
-        console.log(headers);
-        console.log(response);
-        */
-        sendResponse({
-          status: status,
-          headers: headers,
-          response: response
-        });
-      });
     }
     return true;
   });

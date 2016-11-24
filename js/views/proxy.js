@@ -51,14 +51,24 @@ var Pocuito = Pocuito || {};
     template: '#template-proxy',
 
     events: {
-      'click #recordRequestsBtn': 'startRecording',
-      'click #stopRecordRequestsBtn': 'stopRecording',
       'click #resetProxyBtn': 'reset',
-      'click .refreshProxyBtn': 'refresh'
+      'click .refreshProxyBtn': 'refresh',
+      'click #setToSystemProxyBtn': 'setToSystemProxy',
+      'click #setToDirectBtn': 'setToDirect'
+    },
+
+    setToSystemProxy: function() {
+      setChromeProxyConfig({'mode': 'system'});
+      logger.success('Proxy settings changed to system');
+    },
+
+    setToDirect: function() {
+      setChromeProxyConfig({'mode': 'direct'});
+      logger.success('Direct connection');
     },
 
     initialize: function() {
-      this.requestsCollection = new Pocuito.Requests();
+      this.requestsCollection = new Pocuito.Requests({'proxyUrl': Pocuito.proxy.url});
 
       this.refresh();
 
@@ -70,7 +80,8 @@ var Pocuito = Pocuito || {};
     },
 
     templateContext: function() {
-      var state = this.requestsCollection.getStateObj();
+      // var state = this.getStateObj();
+      var state = {};
       return state;
     },
 
@@ -78,27 +89,7 @@ var Pocuito = Pocuito || {};
       this.requestsCollection.clear();
     },
 
-    startRecording: function(e) {
-      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        var tabId = tabs[0].id;
-        var bgPage = chrome.extension.getBackgroundPage();
-        if (bgPage && bgPage.proxy) {
-          bgPage.proxy.startRecording({'tabId': tabId});
-        }
-      });
-      this.requestsCollection.setState(2);
-    },
-
-    stopRecording: function(e) {
-      var bgPage = chrome.extension.getBackgroundPage();
-      if (bgPage && bgPage.proxy) {
-        bgPage.proxy.stopRecording();
-      }
-      this.requestsCollection.setState(1);
-    },
-
     onRender: function() {
-      var state = this.requestsCollection.getStateObj();
       if (!this.getRegion('proxy_table').hasView()) {
         this.showChildView('proxy_table', new Pocuito.RequestsTableView({'collection': this.requestsCollection}));
       }

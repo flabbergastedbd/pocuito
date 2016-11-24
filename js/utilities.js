@@ -50,6 +50,18 @@ function base64ArrayBuffer(arrayBuffer) {
 
     base64 += encodings[a] + encodings[b] + encodings[c] + '='
   }
-  
+
   return base64
+}
+
+function getProxyHostPort(url) {
+  var l = document.createElement('a');
+  l.href = url;
+  return {host: l.host.split(':')[0], port: l.port};
+}
+
+function addUrlPath(baseUrl, path) {
+  if (baseUrl.endsWith('/')) baseUrl = baseUrl.substring(0, baseUrl.length - 1);
+  if (path.startsWith('/')) path = path.substring(1);
+  return baseUrl + '/' + path;
 }

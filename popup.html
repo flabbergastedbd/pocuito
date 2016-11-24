@@ -7,26 +7,12 @@
 <div class="form-group">
   <label class="col-sm-2 control-label">URL</label>
   <div class="col-sm-10">
-    <textarea type="text" class="form-control" id="urls" placeholder="URL with wildcards (Seperate by newline)">https://*/*</textarea>
-  </div>
-</div>
-<div class="form-group">
-  <label class="col-sm-2 control-label">Resource Types</label>
-  <div class="col-sm-10">
-    <select multiple class="form-control" id='resourceTypes'>
-      <option value="main_frame" selected>main_frame</option>
-      <option value="sub_frame" selected>sub_frame</option>
-      <option value="object">object</option>
-      <option value="xmlhttprequest" selected>xmlhttprequest</option>
-      <option value="ping">ping</option>
-      <option value="other">other</option>
-    </select>
+    <input type="text" class="form-control" id="urlRegexp" placeholder="URL Regex" value=".*">
   </div>
 </div>
 </script>
 
 <script type='text/html' id='template-tamper-form'>
-<div id='resourceFilter'></div>
 <div class="form-group">
   <div class="col-sm-5">
     <input type="text" class="form-control" id="key1" placeholder="Match">
@@ -53,7 +39,7 @@
 <div class="form-group">
   <label class="col-sm-2 control-label">URL</label>
   <div class="col-sm-10">
-    <input type="text" class="form-control" id="url" placeholder="URL Regex">
+    <input type="text" class="form-control" id="url" placeholder="URL">
   </div>
 </div>
 <div class="form-group">
@@ -118,6 +104,7 @@
 <script type='text/html' id='template-request-item'>
 <td>{{method}}</td>
 <td>{{url}}</td>
+<td>{{data}}</td>
 </script>
 
 <script type='text/html' id='template-requests-table'>
@@ -127,7 +114,7 @@
   <tr>
     <th>Method</th>
     <th>URL</th>
-    <th></th>
+    <th>Data</th>
   </tr>
 </thead>
 <tbody>
@@ -137,6 +124,14 @@
 </script>
 
 <script type="text/html" id='template-root'>
+<div class="row">
+  <div class="col-sm-12">
+    <div class="input-group">
+      <input type="text" class="form-control" id="proxyUrl" placeholder="Proxy URL" value="{{proxy.url}}">
+      <span class="input-group-addon">{{#proxy.active}}ACTIVE{{/proxy.active}}</span>
+    </div>
+  </div>
+</div>
 <br/>
 <div class="row">
   <div class="col-sm-4">
@@ -164,16 +159,16 @@
 <script type='text/html' id='template-proxy'>
 <div id='proxyTable'></div>
 <div class="row">
-  <div class="col-sm-12">
+  <div class="col-sm-6">
     <div class="btn-group">
-      {{#is_init}}
-        <button class='btn btn-primary' id='recordRequestsBtn'>Record</button>
-      {{/is_init}}
-      {{#is_recording}}
-        <button class='btn btn-warning' id='stopRecordRequestsBtn'>Stop</button>
-      {{/is_recording}}
       <button class='btn btn-danger' id='resetProxyBtn'>Reset Requests</button>
       <button class='btn' id='refreshProxyBtn'>Refresh</button>
+    </div>
+  </div>
+  <div class="col-sm-6">
+    <div class="btn-group">
+      <button class='btn' id='setToSystemProxyBtn'>Set System Proxy</button>
+      <button class='btn btn-primary' id='setToDirectBtn'>Set No Proxy</button>
     </div>
   </div>
 </div>
@@ -301,15 +296,15 @@ Replayer
 <link rel='stylesheet' href='/css/pocuito.css'/>
 
 <script src='/js/logging.js'></script>
+<script src='/js/utilities.js'></script>
+<script src='/js/extension_utilities.js'></script>
 
 <script src='/js/models/event.js'></script>
-<script src='/js/models/request.js'></script>
+<script src='/js/models/client.js'></script>
 
 <script src='/js/collections/events.js'></script>
 <script src='/js/collections/requests.js'></script>
 
-<script src='/js/views/recorder.js'></script>
-<script src='/js/views/replayer.js'></script>
 <script src='/js/views/events.js'></script>
 <script src='/js/views/status.js'></script>
 <script src='/js/views/event_form.js'></script>

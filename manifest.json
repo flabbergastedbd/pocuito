@@ -16,7 +16,7 @@
   "content_security_policy": "default-src 'self'; script-src 'self'; connect-src *",
   "permissions": [
     "storage",
-    "webRequest",
+    "proxy",
     "<all_urls>"
   ],
   "content_scripts": [
@@ -38,10 +38,8 @@
       "/js/models/event.js",
       "/js/collections/events.js",
       "/js/background.js",
-      "/js/models/request.js",
-      "/js/collections/requests.js",
-      "/js/utilities.js",
-      "/js/proxy.js"
+      "/js/extension_utilities.js",
+      "/js/utilities.js"
     ],
     "persistent": true
   }

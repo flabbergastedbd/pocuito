@@ -25,17 +25,17 @@ or
 
 ### Usage
 
-Let us take an example of a poc where we search in github and verify that our search term is in response body.
+Let us take an example of a poc of XSS in chrome (Because of XSS Auditor you might not see a popup, but developer console will show your payload success).
 
-+ Let's navigate to ``github.com``.
-+ Let us click on the extension and add an event called start proxy (`https://github.com/*` as url filter) as we would like to assert response of a request later.
++ Let's navigate to ``testphp.vulnweb.com``.
++ Let us click on the extension and add an event called start proxy (`https://testphp.vulnweb.com/*` as url filter) as we would like to assert response of a request later.
 + Once the proxy event is added, let us click on record user actions to record our search actions.
-+ Now, we will click on the github search and search for `anything`.
++ Now, we will click on the search, search for `"><img src=x onerror="alert(9);` and click on the button `Go`.
 + When we open the popup we will see multiple click and change events made by us.
 + Since our required capture is done, we will add stop proxy event.
 + Now, let us have a look at proxy tab to see the captured requests (Try to find the search request so that we can add an assert event).
-+ Once we have the url, we can just add an assert response body event with a url regex (in this case `https://github.com/search*`) and content regex (i.e `anything`).
-+ If necessary add comments to each step, eg: Lets click on the first step cursor button and add comment `Navigate to https://github.com and then play`.
++ Once we have the url, we can just add an assert response body event with a url regex (in this case `https://testphp.vulnweb.com/*` and `POST` method) and content regex (i.e `alert`).
++ If necessary add comments to each step, eg: Lets click on the first step cursor button and add comment `Navigate to https://testphp.vulnweb.com and then play`.
 
 To replay any step just select a step and click on **Play Step**.
 

@@ -8,8 +8,7 @@ var Pocuito = Pocuito || {};
 
     getData: function() {
       return {
-        'urls': $('#urls').val().split('\n'),
-        'types': $('select#resourceTypes').val()
+        'url_regexp': $('#urlRegexp').val()
       };
     }
   });
@@ -44,10 +43,10 @@ var Pocuito = Pocuito || {};
     }
   });
 
-  Pocuito.TamperFormView = Pocuito.CustomFormView.extend({
+  Pocuito.TamperFormView = Marionette.View.extend({
     template: '#template-tamper-form',
 
-    getCustomData: function() {
+    getData: function() {
       var replacements = {};
       var k, v;
       _.each(_.range(2), function(i, index) {
@@ -97,7 +96,7 @@ var Pocuito = Pocuito || {};
       this.forms = {
         'Stop Proxy': [Pocuito.ProxyFormView, 'stop_proxy'],
         'Start Proxy': [Pocuito.ProxyFormView, 'start_proxy'],
-        // 'Tamper Request Body': [Pocuito.TamperFormView, 'tamper_req_body'],
+        'Tamper Request Body': [Pocuito.TamperFormView, 'tamper_req_body'],
         // 'Tamper Request Header': [Pocuito.TamperFormView, 'tamper_req_header'],
         'Assert Response Header': [Pocuito.AssertFormView, 'assert_res_header'],
         'Assert Response Body': [Pocuito.AssertFormView, 'assert_res_body'],
@@ -123,7 +122,9 @@ var Pocuito = Pocuito || {};
 
     showRelevantEventForm: function(e) {
       this.type = $(e.target).find('option:selected').val();
-      this.showChildView('relevantEventForm', new this.forms[this.type][0]({collection: this.collection}));
+      if (this.forms[this.type] && this.forms[this.type][0]) {
+        this.showChildView('relevantEventForm', new this.forms[this.type][0]({collection: this.collection}));
+      }
     },
 
     addEvent: function() {

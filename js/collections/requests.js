@@ -3,15 +3,36 @@ var Pocuito = Pocuito || {};
 (function () {
 	'use strict';
 
-  var STATE_INIT = 1;
-  var STATE_RECORDING = 2;
+  var UNSAFE_HEADERS = ['Cookie', 'Referer', 'Accept-Encoding', 'User-Agent', 'Origin'];
+
+  Pocuito.Request = Backbone.Model.extend({
+    // idAttribute: "requestId",
+    defaults: {
+      'id': null,
+    },
+
+    getJqueryAjaxFormat: function() {
+      var data = {};
+      data['url'] = this.get('url');
+      data['headers'] = {};
+      _.each(this.get('requestHeaders'), function(h, i) {
+        if (UNSAFE_HEADERS.indexOf(h['name']) == -1)
+          data['headers'][h['name']] = h['value'];
+      }, this);
+      data['method'] = this.get('method');
+
+      var rBody = this.get('requestBody');
+      if (rBody && rBody.formData) data['data'] = rBody.formData
+      return(data);
+    }
+  });
 
   Pocuito.Requests = Backbone.Collection.extend({
     model: Pocuito.Request,
-    chromeStorage: new Backbone.ChromeStorage("Requests"),
+    filterData: null,
 
-    initialize: function() {
-      this.a = null;
+    initialize: function(props) {
+      this.url = addUrlPath(props.proxyUrl, 'requests');
     },
 
     clear: function() {
@@ -22,48 +43,20 @@ var Pocuito = Pocuito || {};
       }, this);
     },
 
-    getItem: function(k) {
-      return localStorage.getItem(k);
-    },
-
-    setItem: function(k, v) {
-      localStorage.setItem(k, v);
-    },
-
-    setState: function(i) {
-      this.setItem('ProxyState', i);
-      this.trigger('change');
-    },
-
-    getState: function() {
-      var s = this.getItem('ProxyState');
-      if (s === null) {
-        s = 1;
-        this.setState(s);
-      } else {
-        s = parseInt(s);
-      }
-      return s;
-    },
-
-    getStateObj: function() {
-      var s = this.getState();
-      return {
-        is_init: s === STATE_INIT,
-        is_recording: s === STATE_RECORDING,
-      };
-    },
-
     refresh: function(callback) {
-      this.fetch({"success": callback, "reset": true});
+      var data = this.filterData ? $.param(this.filterData) : null;
+      this.fetch({
+        data: data,
+        success: callback,
+        reset: true
+      });
     },
 
-    insert: function(data) {
-      data['id'] = parseInt(data.requestId);
-      this.create(data);
+    setFilterData: function(data) {
+      this.filterData = data;
     },
 
-    getAjaxRequest: function(url, method, data) {
+    getRequest: function(url, method, data) {
       var urlRegex = new RegExp(url);
       var request = this.find(function(m) {
         if (urlRegex.test(m.get('url')) && (method == m.get('method'))) {

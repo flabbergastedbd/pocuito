@@ -1,1 +1,9 @@
 bower_components
+
+/*.pyc
+*.log
+
+*.crt
+*.key
+ca*
+
