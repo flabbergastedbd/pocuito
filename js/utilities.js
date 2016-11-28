@@ -61,7 +61,7 @@ function getProxyHostPort(url) {
 }
 
 function addUrlPath(baseUrl, path) {
-  if (baseUrl.endsWith('/')) baseUrl = baseUrl.substring(0, baseUrl.length - 1);
-  if (path.startsWith('/')) path = path.substring(1);
+  if (baseUrl && baseUrl.endsWith('/')) baseUrl = baseUrl.substring(0, baseUrl.length - 1);
+  if (path && path.startsWith('/')) path = path.substring(1);
   return baseUrl + '/' + path;
 }

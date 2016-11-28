@@ -12,10 +12,11 @@ var Pocuito = Pocuito || {};
       this.fetch();  // New client created only on POST
     },
 
-    addBodyTampers: function(replacements) {
-      if (this.body_tampers === null) this.body_tampers = {};
-      _.extend(replacements, this.body_tampers)
-      this.set({'body_tampers': replacements});
+    extendAttribute: function(attrName, extraAttrs) {
+      if (this.get(attrName) != null) {
+        _.extend(extraAttrs, this.get(attrName));
+      }
+      this.set(attrName, extraAttrs);
     }
   });
 

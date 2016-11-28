@@ -12,8 +12,10 @@ var Pocuito = Pocuito || {};
       'user_input': null, // {'type': null, 'xpath': null, 'url': null, 'value': null, 'cursor': false, 'step': null, 'text': null, 'tag': null}
 
       // Tamper events
-      'tamper_req_header': null,  // {'url_regexp': '', 'replacements': {}}  (Will be run on active tab only, and only on header values & request body)
       'tamper_req_body': null,  // {'url_regexp': '', 'replacements': {}}  (Will be run on active tab only)
+
+      // Add events
+      'add_res_header': null,  // {'url_regexp': '', 'replacements': {}}  (Will be run on active tab only, and only on header values & request body)
 
       // Assert events
       'assert_res_header': null, // {'url': '', 'method': '', 'assertions': {}}  (Will be run on active tab only)
@@ -39,8 +41,8 @@ var Pocuito = Pocuito || {};
         var u = this.get('user_input');
         var s = u['value'] || u['text'] || u['xpath'];
         str += u['type'] + ' --> ' + s;
-      } else if (this.get('tamper_req_header')) {
-        str += 'Tamper request header values on ' + this.get('tamper_req_header')['urls'].join(',') + ' ' + JSON.stringify(this.get('tamper_req_header')['replacements']);
+      } else if (this.get('add_res_header')) {
+        str += 'Adding response headers ' + JSON.stringify(this.get('add_res_header')['replacements']);
       } else if (this.get('tamper_req_body')) {
         str += 'Tamper request body values on ' + JSON.stringify(this.get('tamper_req_body')['replacements']);
       } else if (this.get('assert_res_status')) {
@@ -72,6 +74,8 @@ var Pocuito = Pocuito || {};
         this.assertRes('s', callback);
       } else if (this.get('tamper_req_body')) {
         this.tamperReqBody(callback);
+      } else if (this.get('add_res_header')) {
+        this.addResHeader(callback);
       }
     },
 
@@ -204,7 +208,23 @@ var Pocuito = Pocuito || {};
     tamperReqBody: function(callback) {
       if (Pocuito.client) {
         var data = this.get('tamper_req_body');
-        Pocuito.client.addBodyTampers(data.replacements);
+        Pocuito.client.extendAttribute('body_tampers', data.replacements);
+        callback({
+          "success": true,
+          "message": "Added tampering successfully"
+        });
+      } else {
+        callback({
+          "success": false,
+          "message": "Couldn't add tampers"
+        });
+      }
+    },
+
+    addResHeader: function(callback) {
+      if (Pocuito.client) {
+        var data = this.get('add_res_header');
+        Pocuito.client.extendAttribute('response_headers_add', data.replacements);
         callback({
           "success": true,
           "message": "Added tampering successfully"

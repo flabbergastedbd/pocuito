@@ -102,7 +102,9 @@ var Pocuito = Pocuito || {};
     },
 
 		onRender: function() {
-      this.showChildView('eventsTable', new Pocuito.EventsTableView({'collection': this.eventsCollection}));
+      if (this.eventsCollection.length > 0) {
+        this.showChildView('eventsTable', new Pocuito.EventsTableView({'collection': this.eventsCollection}));
+      }
 		}
   });
 

@@ -236,17 +236,19 @@
 {{^events.length}}
   {{#is_popup}}
     <div class="row">
-      <div class="form-group">
-        <label class="control-label">Load Poc (Will open a new tab, upload there)</label>
-        <button class='btn btn-primary form-control' id='openInNewTabBtn'>Load Poc</button>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <button class='btn btn-success form-control' id='openInNewTabBtn'>Load Poc</button>
+        </div>
       </div>
     </div>
   {{/is_popup}}
   {{^is_popup}}
     <div class="row">
-      <div class="form-group">
-        <label class="control-label">Load Poc</label>
-        <input type='file' id='pocFile'>
+      <div class="col-sm-4">
+        <div class="form-group">
+          <input type='file' id='pocFile'>
+        </div>
       </div>
     </div>
   {{/is_popup}}

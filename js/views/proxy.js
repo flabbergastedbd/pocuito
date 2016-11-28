@@ -90,7 +90,7 @@ var Pocuito = Pocuito || {};
     },
 
     onRender: function() {
-      if (!this.getRegion('proxy_table').hasView()) {
+      if (!this.getRegion('proxy_table').hasView() && (this.requestsCollection.length > 0)) {
         this.showChildView('proxy_table', new Pocuito.RequestsTableView({'collection': this.requestsCollection}));
       }
     }

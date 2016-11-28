@@ -20,7 +20,7 @@ var PocuitoBackground = (function() {
               chrome.storage.local.set({'proxy': {'url': proxy.url, 'active': true}});
             }
           }).fail(function() {
-            chrome.storage.local.set({'proxy': {'url': proxy.url, 'active': true}});
+            chrome.storage.local.set({'proxy': {'url': null, 'active': false}});
           });
         }
       });
@@ -47,4 +47,4 @@ var PocuitoBackground = (function() {
 })();
 
 var background = new PocuitoBackground();
-background.keepPingingProxy(3000);
+background.keepPingingProxy(15000);

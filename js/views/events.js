@@ -58,11 +58,9 @@ var Pocuito = Pocuito || {};
 		},
 
 		onRender: function() {
-      if (this.collection.length > 0) {
-        this.showChildView('body', new Pocuito.EventsView({
-          collection: this.collection
-        }));
-      }
+      this.showChildView('body', new Pocuito.EventsView({
+        collection: this.collection
+      }));
 		}
 	});
 

@@ -1,6 +1,6 @@
 bower_components
 
-/*.pyc
+*.pyc
 *.log
 
 *.crt

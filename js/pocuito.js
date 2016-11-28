@@ -35,7 +35,7 @@ logger = new Pocuito.Logger();  // Create logger which uses backbone.radio
       chrome.storage.local.set({proxy: Pocuito.proxy}, function() {
         var bgPage = chrome.extension.getBackgroundPage();
         if (bgPage && bgPage.background) bgPage.background.ping();
-        Pocuito.client = new Pocuito.Client({'proxyUrl': Pocuito.proxy.url});
+        if (Pocuito.proxy.url) $this.initClient(Pocuito.proxy.url, true);
         $this.render();
       });
     },
@@ -69,7 +69,7 @@ logger = new Pocuito.Logger();  // Create logger which uses backbone.radio
     },
 
     onBeforeRender: function() {
-      if (Pocuito.proxy.url) this.initClient(Pocuito.proxy.url);
+      if (Pocuito.proxy.url != null) this.initClient(Pocuito.proxy.url);
     },
 
     onRender: function() {
@@ -79,7 +79,7 @@ logger = new Pocuito.Logger();  // Create logger which uses backbone.radio
     },
 
     resetChildren: function() {
-      if (Pocuito.client) {
+      if (Pocuito.client && (Pocuito.proxy.url != null)) {
         this.initClient(Pocuito.proxy.url, true);
       }
       _.each(_.keys(this.regions), function(region) {

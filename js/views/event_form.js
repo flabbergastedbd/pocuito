@@ -97,7 +97,7 @@ var Pocuito = Pocuito || {};
         'Stop Proxy': [Pocuito.ProxyFormView, 'stop_proxy'],
         'Start Proxy': [Pocuito.ProxyFormView, 'start_proxy'],
         'Tamper Request Body': [Pocuito.TamperFormView, 'tamper_req_body'],
-        // 'Tamper Request Header': [Pocuito.TamperFormView, 'tamper_req_header'],
+        'Add Response Header': [Pocuito.TamperFormView, 'add_res_header'],
         'Assert Response Header': [Pocuito.AssertFormView, 'assert_res_header'],
         'Assert Response Body': [Pocuito.AssertFormView, 'assert_res_body'],
         'Assert Response Status': [Pocuito.AssertFormView, 'assert_res_status'],

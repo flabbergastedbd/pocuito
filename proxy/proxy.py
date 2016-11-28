@@ -160,6 +160,7 @@ class ProxyHandler(tornado.web.RequestHandler):
             rModel.client = self.client
             self.session.add(rModel)
             self.session.commit()
+            response = self.client.tamper_response(response)
         # End pocuito code
 
         self.finish_response(response)

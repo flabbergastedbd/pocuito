@@ -1,5 +1,6 @@
 import re
 import json
+import base64
 import hashlib
 
 from sqlalchemy import Column, Integer, Float, Text, Boolean, String, ForeignKey, create_engine
@@ -18,10 +19,13 @@ class Client(Base):
     active = Column(Boolean, default=False)
     url_regexp = Column(String, default='^$')
     body_tampers_string = Column(String, nullable=True)
+    response_headers_add_string = Column(String, nullable=True)
 
     def update(self, json_data):
         if json_data.get('body_tampers', None):
             self.body_tampers_string = json.dumps(json_data['body_tampers'])
+        if json_data.get('response_headers_add', None):
+            self.response_headers_add_string = json.dumps(json_data['response_headers_add'])
         if json_data.get('active', None):
             self.active = json_data['active']
         if json_data.get('url_regexp', None):
@@ -32,12 +36,17 @@ class Client(Base):
             'ip': self.ip,
             'active': self.active,
             'url_regexp': self.url_regexp,
-            'body_tampers': self.body_tampers
+            'body_tampers': self.body_tampers,
+            'response_headers_add': self.response_headers_add
         })
 
     @hybrid_property
     def body_tampers(self):
         return(json.loads(self.body_tampers_string) if self.body_tampers_string else None)
+
+    @hybrid_property
+    def response_headers_add(self):
+        return(json.loads(self.response_headers_add_string) if self.response_headers_add_string else None)
 
     def is_url_match(self, url):
         return(re.search(self.url_regexp, url))
@@ -48,6 +57,13 @@ class Client(Base):
             for match, replacement in body_tampers.iteritems():
                 request.body = re.sub(match, replacement, request.body)
         return(request)
+
+    def tamper_response(self, response):
+        response_headers_add = self.response_headers_add
+        if response_headers_add and response.headers:
+            for k, v in response_headers_add.iteritems():
+                response.headers.parse_line("%s: %s" % (k, v))
+        return(response)
 
 class Request(Base):
     __tablename__ = 'requests'
