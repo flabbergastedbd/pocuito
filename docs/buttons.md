@@ -16,7 +16,9 @@
 
 #### Proxy Log
 
-+ **Record**: Start recording requests
-+ **Stop**: Stop recording requests
 + **Reset Requests**: Clear request log
++ **Refresh**: Update requests being shown
+
++ **Set No Proxy**: Set browser proxy settings to `direct`
++ **Set System Proxy**: Set browser proxy settings to `system`
 

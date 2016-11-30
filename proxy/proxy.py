@@ -425,7 +425,7 @@ def main():
     args = arg_parser.parse_args()
 
     # The tornado application, which is used to pass variables to request handler
-    application = tornado.web.Application(debug=True, gzip=True,)
+    application = tornado.web.Application(debug=False, gzip=True,)
 
     # State dictionary object will be used by requests
     application.state = {}

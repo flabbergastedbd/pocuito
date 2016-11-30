@@ -58,6 +58,10 @@ var Pocuito = Pocuito || {};
     }
   });
 
+  Pocuito.HeaderFormView = Pocuito.TamperFormView.extend({
+    template: '#template-header-form'
+  });
+
   Pocuito.AssertFormView = Marionette.View.extend({
     template: '#template-assert-form',
 
@@ -97,7 +101,7 @@ var Pocuito = Pocuito || {};
         'Stop Proxy': [Pocuito.ProxyFormView, 'stop_proxy'],
         'Start Proxy': [Pocuito.ProxyFormView, 'start_proxy'],
         'Tamper Request Body': [Pocuito.TamperFormView, 'tamper_req_body'],
-        'Add Response Header': [Pocuito.TamperFormView, 'add_res_header'],
+        'Add Response Header': [Pocuito.HeaderFormView, 'add_res_header'],
         'Assert Response Header': [Pocuito.AssertFormView, 'assert_res_header'],
         'Assert Response Body': [Pocuito.AssertFormView, 'assert_res_body'],
         'Assert Response Status': [Pocuito.AssertFormView, 'assert_res_status'],

@@ -23,9 +23,13 @@ class Client(Base):
 
     def update(self, json_data):
         if json_data.get('body_tampers', None):
-            self.body_tampers_string = json.dumps(json_data['body_tampers'])
+            tamper_dict = json_data['body_tampers']
+            if self.body_tampers_string: tamper_dict.update(self.body_tampers)
+            self.body_tampers_string = json.dumps(tamper_dict)
         if json_data.get('response_headers_add', None):
-            self.response_headers_add_string = json.dumps(json_data['response_headers_add'])
+            add_dict = json_data['response_headers_add']
+            if self.response_headers_add_string: add_dict.update(self.response_headers_add)
+            self.response_headers_add_string = json.dumps(add_dict)
         if json_data.get('active', None):
             self.active = json_data['active']
         if json_data.get('url_regexp', None):
