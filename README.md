@@ -13,7 +13,7 @@ most of the time, so just record the poc, distribute and replay it whenever nece
 
 ### Installation
 
-+ Download & Install [CRX](https://github.com/tunnelshade/pocuito/releases/download/v0.1/pocuito.crx)
++ Download & Install from [here](https://github.com/tunnelshade/pocuito/releases)
 + Start python proxy if planning on using tampering or asserting functionality.
 
 or
