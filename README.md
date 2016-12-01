@@ -1,4 +1,4 @@
-![Pocuito](/images/icons/icon128.png)
+![Pocuito](/extension/images/icons/icon128.png)
 
 # Pocuito
 
@@ -23,18 +23,19 @@ or
 + Setup proxy
 + Open Chrome extension settings
 + Enable developer mode checkbox
-+ Click on load unpacked extension and browse to root directory
++ Click on load unpacked extension and browse to root extension directory
 
 ### Proxy Setup
 
-+ Install pip requirements `pip install -r proxy/requirements.txt`
-+ Start proxy server `python proxy.py`
-+ It will print a url to the console which will be used in the addon
++ Install pip requirements ``pip install -r proxy/requirements.txt``.
++ Start proxy server ``python proxy.py --uuid some_random_string`` (proxy url = ``http://<ip>:8888/some_random_string``)
++ For more customizations look into ``python proxy.py --help``.
++ It will print a url to the console which will be used in the addon.
 
 ### Usage
 
 Setup the proxy and put that url in the addon and wait a moment or two so that addon can verify. Let us take an example of a
-poc of XSS in chrome (Because of XSS Auditor you might not see a popup, but developer console will show your payload success).
+poc of XSS in chrome.
 
 + Let's navigate to ``testphp.vulnweb.com``.
 + Let us click on the extension and add an event called start proxy (`testphp` as url filter) to tamper responses later.
